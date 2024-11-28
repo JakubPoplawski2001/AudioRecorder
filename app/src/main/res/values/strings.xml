@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AudioRecorder</string>
+    <string name="forgot_password_prompt">Forgot password?</string>
+    <string name="forgot_password_link">Recover here</string>
+    <string name="no_account_prompt">Do not have account?</string>
+    <string name="no_account_link">Register here</string>
+    <string name="have_account_prompt">Have account?</string>
+    <string name="have_account_link">Login here</string>
+</resources>
