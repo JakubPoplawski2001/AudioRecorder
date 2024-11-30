@@ -6,4 +6,12 @@
     <string name="no_account_link">Register here</string>
     <string name="have_account_prompt">Have account?</string>
     <string name="have_account_link">Login here</string>
+    <string name="invalid_email_message">Invalid email</string>
+    <string name="invalid_password_message">Invalid password</string>
+    <string name="invalid_create_email_message">Invalid email</string>
+    <string name="invalid_create_password_message">Invalid email</string>
+    <string name="user_created_message">Registration complete. Please log in</string>
+    <string name="failed_registration_message">Registration failed. Please check your credentials and try later.</string>
+    <string name="login_successful_message">Login successful</string>
+    <string name="login_failed_message">Login failed. Pleas check your credentials and try later.</string>
 </resources>
