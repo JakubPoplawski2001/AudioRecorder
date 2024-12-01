@@ -71,6 +71,9 @@ class RegisterActivity : AppCompatActivity() {
                         resources.getString(R.string.user_created_message),
                         Toast.LENGTH_LONG)
                         .show()
+
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
                 } else {
                     Toast.makeText(this,
                         resources.getString(R.string.registration_failed_message) +
