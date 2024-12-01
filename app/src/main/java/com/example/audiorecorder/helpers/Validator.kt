@@ -1,4 +1,4 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.helpers
 
 object Validator {
 

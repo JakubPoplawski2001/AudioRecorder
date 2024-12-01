@@ -16,4 +16,7 @@
     <string name="password_recovery_link_sent_message">Password recovery link sent to provided email</string>
     <string name="login_successful_message">Login successful</string>
     <string name="login_failed_message">Login failed. Pleas check your credentials and try later.</string>
+    <string name="long_text_text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel tellus dignissim, mollis mi vel, vehicula sapien. Etiam placerat tristique sem, at lacinia lorem mattis sed. Quisque non tortor in nisi faucibus varius in eu enim. Praesent ut urna fringilla, ultrices mauris sed, ullamcorper urna. Morbi euismod ipsum eget tempor porta. Integer quis est vel tellus placerat porta. Mauris semper venenatis mauris, a convallis diam. Phasellus aliquet gravida sodales. Suspendisse et ultricies nulla, eu molestie mauris.
+
+Quisque sit amet mi sit amet diam laoreet elementum nec id turpis. Praesent tincidunt at nisi id maximus. Maecenas feugiat libero a lorem viverra, vulputate lobortis leo efficitur. Nunc quis mauris eu arcu dignissim vehicula. Nunc ac quam mattis, viverra nunc pharetra, aliquet massa. Duis bibendum at lacus vel feugiat. Vivamus efficitur lorem quam, sit amet sagittis mi varius eu. Donec finibus sapien aliquam dictum aliquam. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Nam fringilla, sem ac fermentum interdum, lectus erat sagittis dolor, ut fringilla ligula sem et est. Donec quis tristique orci, in imperdiet sem. Quisque ut est tempus enim ullamcorper hendrerit.</string>
 </resources>

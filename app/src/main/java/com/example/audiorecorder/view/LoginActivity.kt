@@ -1,4 +1,4 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.audiorecorder.R
+import com.example.audiorecorder.helpers.Validator
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -60,6 +62,15 @@ class LoginActivity : AppCompatActivity() {
         loginBtn.setOnClickListener {
             val login = loginInput.text.toString()
             val password = passwordInput.text.toString()
+
+            // TODO: remove dev fast login
+            if (true) {
+                val fast_login = "qwas.wodor@gmail.com"
+                val fast_password = "123456789"
+                authorizeLogin(fast_login, fast_password)
+                return@setOnClickListener
+            }
+            // TODO: remove dev fast login
 
             if (!validateLoginInput(login)) return@setOnClickListener
             if (!validatePasswordInput(password)) return@setOnClickListener

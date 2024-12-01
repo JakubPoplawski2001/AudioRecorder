@@ -1,4 +1,4 @@
-package com.example.audiorecorder
+package com.example.audiorecorder.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +10,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.audiorecorder.R
+import com.example.audiorecorder.helpers.Validator
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
