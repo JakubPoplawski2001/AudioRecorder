@@ -11,7 +11,9 @@
     <string name="invalid_create_email_message">Invalid email</string>
     <string name="invalid_create_password_message">Invalid email</string>
     <string name="user_created_message">Registration complete. Please log in</string>
-    <string name="failed_registration_message">Registration failed. Please check your credentials and try later.</string>
+    <string name="registration_failed_message">Registration failed. Please check your credentials and try later.</string>
+    <string name="password_recovery_failed_message">Can not recover password. Please check your email and try later. If you do not have account register it first.</string>
+    <string name="password_recovery_link_sent_message">Password recovery link sent to provided email</string>
     <string name="login_successful_message">Login successful</string>
     <string name="login_failed_message">Login failed. Pleas check your credentials and try later.</string>
 </resources>

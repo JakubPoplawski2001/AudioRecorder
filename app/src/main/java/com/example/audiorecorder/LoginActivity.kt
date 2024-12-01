@@ -16,7 +16,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var auth: FirebaseAuth;
+    private lateinit var firebaseAuth: FirebaseAuth;
+
+    private lateinit var loginInput: EditText
+    private lateinit var passwordInput: EditText
+    private lateinit var loginBtn: Button
+    private lateinit var passwordRecoveryLink: TextView
+    private lateinit var registerLink: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,13 +35,13 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        auth = Firebase.auth
+        firebaseAuth = Firebase.auth
 
-        val loginInput = findViewById<EditText>(R.id.loginInput)
-        val passwordInput = findViewById<EditText>(R.id.passwordInput)
-        val loginBtn = findViewById<Button>(R.id.loginBtn)
-        val passwordRecoveryLink =  findViewById<TextView>(R.id.passwordRecoveryLink)
-        val registerLink =  findViewById<TextView>(R.id.registerLink)
+        loginInput = findViewById(R.id.loginInput)
+        passwordInput = findViewById(R.id.passwordInput)
+        loginBtn = findViewById(R.id.loginBtn)
+        passwordRecoveryLink =  findViewById(R.id.passwordRecoveryLink)
+        registerLink =  findViewById(R.id.registerLink)
 
         registerLink.setOnClickListener{
             // Starts new Register Activity
@@ -42,76 +49,108 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        passwordRecoveryLink.setOnClickListener {
+            val login = loginInput.text.toString()
+
+            if (!validateLoginInput(login)) return@setOnClickListener
+
+            authorizePasswordReset(login)
+        }
+
         loginBtn.setOnClickListener {
             val login = loginInput.text.toString()
             val password = passwordInput.text.toString()
 
-            if (!validateEmail(login)) {
-                Toast.makeText(
-                    this,
-                    resources.getString(R.string.invalid_email_message),
-                    Toast.LENGTH_LONG
-                )
-                    .show()
-                return@setOnClickListener
-            }
-            if (!validatePassword(password)) {
-                Toast.makeText(
-                    this,
-                    resources.getString(R.string.invalid_password_message),
-                    Toast.LENGTH_LONG
-                )
-                    .show()
-                return@setOnClickListener
-            }
+            if (!validateLoginInput(login)) return@setOnClickListener
+            if (!validatePasswordInput(password)) return@setOnClickListener
 
-            auth
-                .signInWithEmailAndPassword(login, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        // Login successfully
-                        val user = auth.currentUser
-
-                        // Clear input
-                        loginInput.text.clear()
-                        passwordInput.text.clear()
-
-                        Toast.makeText(this,
-                            resources.getString(R.string.login_successful_message),
-                            Toast.LENGTH_LONG)
-                            .show()
-
-                        // Starts new Library Activity
-                        val intent = Intent(this, LibraryActivity::class.java)
-                        startActivity(intent)
-
-                    } else {
-                        Toast.makeText(this,
-                            resources.getString(R.string.login_failed_message) +
-                                    " Error code: " + task.exception,
-                            Toast.LENGTH_LONG)
-                            .show()
-                    }
-                }
-
-
-
+            authorizeLogin(login, password)
         }
 
+    }
 
+    private fun authorizeLogin(login: String, password: String){
+        firebaseAuth
+            .signInWithEmailAndPassword(login, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Login successfully
+                    val user = firebaseAuth.currentUser
+
+                    clearInput()
+
+                    Toast.makeText(this,
+                        resources.getString(R.string.login_successful_message),
+                        Toast.LENGTH_LONG)
+                        .show()
+
+                    // Starts new Library Activity
+                    val intent = Intent(this, LibraryActivity::class.java)
+                    startActivity(intent)
+
+                } else {
+                    Toast.makeText(this,
+                        resources.getString(R.string.login_failed_message) +
+                                " Error code: " + task.exception,
+                        Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
 
     }
 
-    private fun validateEmail(email: String) : Boolean {
-        if (email.isNullOrEmpty()) return false
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) return false
+    private fun authorizePasswordReset(email: String){
+        firebaseAuth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful){
+                    // Send successfully
+                    clearInput()
 
+                    Toast.makeText(this,
+                        resources.getString(R.string.password_recovery_link_sent_message) +
+                                " Error code: " + task.exception,
+                        Toast.LENGTH_LONG)
+                        .show()
+
+                } else {
+                    Toast.makeText(this,
+                        resources.getString(R.string.password_recovery_failed_message) +
+                                " Error code: " + task.exception,
+                        Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+    }
+
+    private fun validateLoginInput(email: String) : Boolean{
+        if (!Validator.validateEmail(email)) {
+            Toast.makeText(
+                this,
+                resources.getString(R.string.invalid_email_message),
+                Toast.LENGTH_LONG
+            )
+                .show()
+            return false
+        }
         return true
     }
 
-    private fun validatePassword(password: String) : Boolean {
-        if (password.isNullOrEmpty()) return false
+    private fun validatePasswordInput(password: String) : Boolean {
+        if (!Validator.validatePassword(password)) {
 
+            Toast.makeText(
+                this,
+                resources.getString(R.string.invalid_password_message),
+                Toast.LENGTH_LONG
+            )
+                .show()
+            return false
+        }
         return true
+    }
+
+    private fun clearInput(){
+        loginInput.text.clear()
+        passwordInput.text.clear()
     }
 }

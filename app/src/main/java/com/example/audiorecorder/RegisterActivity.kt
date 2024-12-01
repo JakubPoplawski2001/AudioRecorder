@@ -16,7 +16,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
 class RegisterActivity : AppCompatActivity() {
-    private lateinit var auth: FirebaseAuth;
+    private lateinit var firebaseAuth: FirebaseAuth;
+
+    private lateinit var loginInput: EditText
+    private lateinit var passwordInput: EditText
+    private lateinit var registerBtn: Button
+    private lateinit var loginLink: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,15 +34,15 @@ class RegisterActivity : AppCompatActivity() {
             insets
         }
 
-        auth = Firebase.auth
+        firebaseAuth = Firebase.auth
 
-        val loginInput = findViewById<EditText>(R.id.loginInput)
-        val passwordInput = findViewById<EditText>(R.id.passwordInput)
-        val registerBtn = findViewById<Button>(R.id.registerBtn)
-        val loginLink =  findViewById<TextView>(R.id.loginLink)
+        loginInput = findViewById(R.id.loginInput)
+        passwordInput = findViewById(R.id.passwordInput)
+        registerBtn = findViewById(R.id.registerBtn)
+        loginLink =  findViewById(R.id.loginLink)
 
         loginLink.setOnClickListener{
-            // Starts new Register Activity
+            // Starts new Login Activity
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
@@ -45,57 +51,60 @@ class RegisterActivity : AppCompatActivity() {
             val login = loginInput.text.toString()
             val password = passwordInput.text.toString()
 
-            if (!validateEmail(login)) {
-                Toast.makeText(this,
-                    resources.getString(R.string.invalid_create_email_message),
-                    Toast.LENGTH_LONG)
-                    .show()
-                return@setOnClickListener
-            }
-            if (!validatePassword(password)){
-                Toast.makeText(this,
-                    resources.getString(R.string.invalid_create_password_message),
-                    Toast.LENGTH_LONG)
-                    .show()
-                return@setOnClickListener
-            }
+            if (!validateLoginInput(login)) return@setOnClickListener
+            if (!validatePasswordInput(password)) return@setOnClickListener
 
-            auth
-                .createUserWithEmailAndPassword(login, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful){
-                        // Registered successfully
-                        // Clear input
-                        loginInput.text.clear()
-                        passwordInput.text.clear()
-
-                        Toast.makeText(this,
-                            resources.getString(R.string.user_created_message),
-                            Toast.LENGTH_LONG)
-                            .show()
-                    } else {
-                        Toast.makeText(this,
-                            resources.getString(R.string.failed_registration_message) +
-                                    " Error code: " + task.exception,
-                            Toast.LENGTH_LONG)
-                            .show()
-                    }
-                }
+            authorizeRegistration(login, password)
         }
 
     }
 
-    private fun validateEmail(email: String) : Boolean {
-        if (email.isNullOrEmpty()) return false
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) return false
+    private fun authorizeRegistration(login: String, password: String){
+        firebaseAuth
+            .createUserWithEmailAndPassword(login, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful){
+                    // Registered successfully
+                    clearInput()
 
+                    Toast.makeText(this,
+                        resources.getString(R.string.user_created_message),
+                        Toast.LENGTH_LONG)
+                        .show()
+                } else {
+                    Toast.makeText(this,
+                        resources.getString(R.string.registration_failed_message) +
+                                " Error code: " + task.exception,
+                        Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+    }
+
+    private fun validateLoginInput(email: String) : Boolean{
+        if (!Validator.validateEmail(email)) {
+            Toast.makeText(this,
+                resources.getString(R.string.invalid_create_email_message),
+                Toast.LENGTH_LONG)
+                .show()
+            return false
+        }
         return true
     }
 
-    private fun validatePassword(password: String) : Boolean {
-        if (password.isNullOrEmpty()) return false
-        if (password.length < 8) return false
-
+    private fun validatePasswordInput(password: String) : Boolean {
+        if (!Validator.validatePassword(password)) {
+            Toast.makeText(this,
+                resources.getString(R.string.invalid_create_password_message),
+                Toast.LENGTH_LONG)
+                .show()
+            return false
+        }
         return true
+    }
+
+    private fun clearInput(){
+        loginInput.text.clear()
+        passwordInput.text.clear()
     }
 }
