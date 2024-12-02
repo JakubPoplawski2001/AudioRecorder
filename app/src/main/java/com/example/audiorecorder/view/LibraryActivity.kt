@@ -1,10 +1,12 @@
 package com.example.audiorecorder.view
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -45,15 +47,19 @@ class LibraryActivity : AppCompatActivity() {
             finish()
         }
 
-        toolBar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                android.R.id.home -> {
-                    Toast.makeText(this, "item ${item.itemId} clicked", Toast.LENGTH_SHORT).show()
-                    true
-                }
-                else -> false
-            }
-        }
+
+//        toolBar.setOnMenuItemClickListener { item ->
+//            when (item.itemId) {
+//                android.R.id.home -> {
+//                    Toast.makeText(this,
+//                        "item ${item.itemId} clicked",
+//                        Toast.LENGTH_SHORT)
+//                        .show()
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
 
         // Setup RecycleView
         recyclerView = findViewById(R.id.recycler_view)
@@ -64,15 +70,15 @@ class LibraryActivity : AppCompatActivity() {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            else -> return super.onOptionsItemSelected(item)
-        }
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            android.R.id.home -> {
+//                finish()
+//                true
+//            }
+//            else -> return super.onOptionsItemSelected(item)
+//        }
+//    }
 
     private fun populateDummyData() {
         itemList.add(Item("Title 1", "Description 1", Date(2024, 12, 1), 30))
