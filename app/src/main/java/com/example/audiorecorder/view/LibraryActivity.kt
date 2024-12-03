@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,7 @@ class LibraryActivity : AppCompatActivity() {
     private lateinit var itemList: ArrayList<Item>
 
     private lateinit var toolBar: Toolbar
+    private lateinit var addButton: Button
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +50,13 @@ class LibraryActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolBar.setNavigationOnClickListener {
             finish()
+        }
+
+        addButton = findViewById(R.id.addButton)
+
+        addButton.setOnClickListener {
+            val intent = Intent(this, AudioPlayerActivity::class.java)
+            startActivity(intent)
         }
 
 
@@ -97,7 +106,7 @@ class LibraryActivity : AppCompatActivity() {
             item.title = "Title $i"
             item.description = "Description $i"
             item.createDate = Date()
-            item.timeLength = i * 15
+            item.timeLength = i * 230000
             itemList.add(item)
         }
     }
