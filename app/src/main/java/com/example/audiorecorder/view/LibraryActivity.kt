@@ -1,5 +1,6 @@
 package com.example.audiorecorder.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -13,9 +14,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audiorecorder.R
+import com.example.audiorecorder.helpers.AudioPlayer
 import com.example.audiorecorder.helpers.ItemListAdapter
 import com.example.audiorecorder.model.Item
 import java.util.Date
+import java.util.UUID
 
 
 class LibraryActivity : AppCompatActivity() {
@@ -65,7 +68,9 @@ class LibraryActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val itemListAdapter = ItemListAdapter(itemList)
+        val itemListAdapter = ItemListAdapter(itemList) {
+                item -> onItemClicked(item)
+        }
         recyclerView.adapter = itemListAdapter
 
     }
@@ -80,9 +85,20 @@ class LibraryActivity : AppCompatActivity() {
 //        }
 //    }
 
+    private fun onItemClicked(item: Item){
+        val intent = Intent(this, AudioPlayerActivity::class.java)
+        intent.putExtra("itemId", item.id)
+        startActivity(intent)
+    }
+
     private fun populateDummyData() {
-        itemList.add(Item("Title 1", "Description 1", Date(2024, 12, 1), 30))
-        itemList.add(Item("Title 2", "Description 2", Date(2024, 12, 1), 45))
-        itemList.add(Item("Title 3", "Description 3", Date(2024, 12, 1), 60))
+        for (i in 1..5) {
+            val item = Item()
+            item.title = "Title $i"
+            item.description = "Description $i"
+            item.createDate = Date()
+            item.timeLength = i * 15
+            itemList.add(item)
+        }
     }
 }

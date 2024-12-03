@@ -13,6 +13,9 @@
         android:theme="@style/Theme.AudioRecorder"
         tools:targetApi="31">
         <activity
+            android:name=".view.AudioPlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.RecorderActivity"
             android:exported="false" />
         <activity
