@@ -17,11 +17,11 @@ class ItemListAdapter (
     // ViewHolder class
     inner class ItemViewHolder(itemView: View, val onClick: (Item) -> Unit)
         : RecyclerView.ViewHolder(itemView) {
-        val title: TextView = itemView.findViewById(R.id.item_title)
-        val description: TextView = itemView.findViewById(R.id.item_description)
-        val createDate: TextView = itemView.findViewById(R.id.item_create_date)
-        val timeLength: TextView = itemView.findViewById(R.id.item_time_length)
-        var currentItem: Item? = null
+        private val title: TextView = itemView.findViewById(R.id.item_title)
+        private val description: TextView = itemView.findViewById(R.id.item_description)
+        private val createDate: TextView = itemView.findViewById(R.id.item_create_date)
+        private val timeLength: TextView = itemView.findViewById(R.id.item_time_length)
+        private var currentItem: Item? = null
 
         init {
             itemView.setOnClickListener {
@@ -37,7 +37,8 @@ class ItemListAdapter (
             title.text = item.title
             description.text = item.description
             createDate.text = item.createDate.toString()
-            timeLength.text = "${item.timeLength} mins"
+            timeLength.text = TimeUtils.toString(
+                item.timeLength, TimeUtils.FormatStyle.HOURS_MINUTES_SECONDS)
         }
     }
 
