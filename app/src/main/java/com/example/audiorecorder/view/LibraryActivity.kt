@@ -59,20 +59,6 @@ class LibraryActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-//        toolBar.setOnMenuItemClickListener { item ->
-//            when (item.itemId) {
-//                android.R.id.home -> {
-//                    Toast.makeText(this,
-//                        "item ${item.itemId} clicked",
-//                        Toast.LENGTH_SHORT)
-//                        .show()
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
-
         // Setup RecycleView
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -83,16 +69,6 @@ class LibraryActivity : AppCompatActivity() {
         recyclerView.adapter = itemListAdapter
 
     }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when (item.itemId) {
-//            android.R.id.home -> {
-//                finish()
-//                true
-//            }
-//            else -> return super.onOptionsItemSelected(item)
-//        }
-//    }
 
     private fun onItemClicked(item: Item){
         val intent = Intent(this, AudioPlayerActivity::class.java)
