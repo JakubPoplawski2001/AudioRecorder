@@ -22,10 +22,10 @@
         app:titleTextColor="@color/design_default_color_background" />
 
     <TextView
-        android:id="@+id/timeLabel"
+        android:id="@+id/currentTimeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00:00:00"
+        android:text="00:00:00.000"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +41,7 @@
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/currentTimeLabel" />
 
     <Button
         android:id="@+id/stopButton"
@@ -65,8 +65,13 @@
         app:layout_constraintStart_toEndOf="@+id/stopButton"
         app:layout_constraintTop_toBottomOf="@+id/seekBar" />
 
-
-
+    <TextView
+        android:id="@+id/endTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="999:59:59.999"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar"
+        app:layout_constraintEnd_toEndOf="@+id/seekBar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
