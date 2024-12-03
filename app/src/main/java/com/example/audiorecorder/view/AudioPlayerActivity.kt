@@ -8,11 +8,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.audiorecorder.R
 import com.example.audiorecorder.model.Item
+import java.io.File
 import java.util.UUID
 
 class AudioPlayerActivity : AppCompatActivity() {
     var itemId: UUID? = null
     var item: Item? = null
+    var file: File? = null
 
     private lateinit var toolBar: Toolbar
 
