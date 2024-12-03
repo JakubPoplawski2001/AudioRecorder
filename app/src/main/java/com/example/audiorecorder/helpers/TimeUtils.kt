@@ -1,7 +1,6 @@
-package com.example.audiorecorder.model
+package com.example.audiorecorder.helpers
 
 object TimeUtils {
-
 
     fun toString(timeInMSec: Int, formatStyle: FormatStyle): String{
         val milliseconds = timeInMSec % 1000
