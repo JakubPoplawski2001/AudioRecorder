@@ -76,25 +76,24 @@ class RecorderActivity : AppCompatActivity() {
 
     private fun startRecording() {
         startTimer()
-
         recorder.start()
     }
 
     private fun stopRecording() {
         timer.stop()
-
         recorder.stop()
+
+        // todo: save recording prompt
+        finish()
     }
 
     private fun pauseRecording() {
         timer.pause()
-
         recorder.pause()
     }
 
     private fun resumeRecording() {
         startTimer()
-
         recorder.resume()
     }
 
