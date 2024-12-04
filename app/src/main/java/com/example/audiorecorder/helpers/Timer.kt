@@ -17,8 +17,6 @@ class Timer (private val callbackDelayInMSec: Long = 300 ) {
         isRunning = true
 
         handler.post(object : Runnable {
-//            val callbackDelayInMSec: Long = 100
-
             override fun run() {
                 if (!isRunning) return
 
