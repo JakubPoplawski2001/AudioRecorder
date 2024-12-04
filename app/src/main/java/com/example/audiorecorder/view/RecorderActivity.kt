@@ -21,8 +21,8 @@ class RecorderActivity : AppCompatActivity() {
 
     private lateinit var toolBar: Toolbar
     private lateinit var timeLabel: TextView
-    private lateinit var playButton: Button
-    private lateinit var stopButton: Button
+    private lateinit var startStopButton: Button
+    private lateinit var pauseButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,37 +46,38 @@ class RecorderActivity : AppCompatActivity() {
         }
 
         timeLabel = findViewById(R.id.timeLabel)
-        playButton = findViewById(R.id.playButton)
-        stopButton = findViewById(R.id.stopButton)
+        startStopButton = findViewById(R.id.startStopButton)
+        pauseButton = findViewById(R.id.pauseButton)
 
 
-        playButton.setOnClickListener {
-            if (!recorder.isRecording) {
+        startStopButton.setOnClickListener {
+            if (!recorder.hasRecordingStarted) {
                 startRecording()
-                // Update UI btn
+                // todo: Update UI btn
             } else {
-                pauseRecording()
-                // Update UI btn
+                stopRecording()
+                // todo: Update UI btn
             }
         }
 
-        stopButton.setOnClickListener { stopRecording() }
+        pauseButton.setOnClickListener {
+            if (!recorder.hasRecordingStarted) return@setOnClickListener
+
+            if (!recorder.isPaused) {
+                pauseRecording()
+                // todo: Update UI btn
+            } else {
+                resumeRecording()
+                // todo: Update UI btn
+            }
+        }
 
     }
 
     private fun startRecording() {
-        timer.start { elapsedTime ->
-            timeLabel.text = TimeUtils.toString(elapsedTime.toInt(),
-                TimeUtils.FormatStyle.HOURS_MINUTES_SECONDS)
-        }
+        startTimer()
 
         recorder.start()
-    }
-
-    private fun pauseRecording() {
-        timer.pause()
-
-        recorder.stop()
     }
 
     private fun stopRecording() {
@@ -84,4 +85,24 @@ class RecorderActivity : AppCompatActivity() {
 
         recorder.stop()
     }
+
+    private fun pauseRecording() {
+        timer.pause()
+
+        recorder.pause()
+    }
+
+    private fun resumeRecording() {
+        startTimer()
+
+        recorder.resume()
+    }
+
+    private fun startTimer() {
+        timer.start { elapsedTime ->
+            timeLabel.text = TimeUtils.toString(elapsedTime.toInt(),
+                TimeUtils.FormatStyle.HOURS_MINUTES_SECONDS)
+        }
+    }
+
 }

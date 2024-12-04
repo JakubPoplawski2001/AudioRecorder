@@ -1,7 +1,6 @@
 package com.example.audiorecorder.helpers
 
 import android.content.Context
-import android.media.MediaRecorder
 import java.io.File
 
 class Recorder (
@@ -9,20 +8,26 @@ class Recorder (
     private val file: File
 ) {
     private val audioRecorder: AudioRecorder = AudioRecorder(context, file)
-    var isRecording: Boolean = false
+    var hasRecordingStarted: Boolean = false
+    var isPaused: Boolean = false
 
     fun start(){
-        isRecording = true
+        hasRecordingStarted = true
         audioRecorder.start()
     }
 
+    fun stop(){
+        hasRecordingStarted = false
+        audioRecorder.stop()
+    }
+
     fun pause() {
-        isRecording = false
+        isPaused = true
         audioRecorder.pause()
     }
 
-    fun stop(){
-        isRecording = false
-        audioRecorder.stop()
+    fun resume() {
+        isPaused = false
+        audioRecorder.resume()
     }
 }
