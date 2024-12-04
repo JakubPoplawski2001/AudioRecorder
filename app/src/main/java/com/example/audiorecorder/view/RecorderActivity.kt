@@ -35,7 +35,7 @@ class RecorderActivity : AppCompatActivity() {
         }
 
         recorder = Recorder(this, File(cacheDir, "test.mp3"))
-        timer = Timer()
+        timer = Timer(1000)
 
         // Setup ToolBar
         toolBar = findViewById(R.id.toolbar)
@@ -69,14 +69,19 @@ class RecorderActivity : AppCompatActivity() {
             timeLabel.text = TimeUtils.toString(elapsedTime.toInt(),
                 TimeUtils.FormatStyle.HOURS_MINUTES_SECONDS)
         }
+
+        recorder.start()
     }
 
     private fun pauseRecording() {
+        timer.pause()
 
+        recorder.stop()
     }
 
     private fun stopRecording() {
         timer.stop()
 
+        recorder.stop()
     }
 }

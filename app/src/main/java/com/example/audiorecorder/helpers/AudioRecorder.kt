@@ -2,6 +2,7 @@ package com.example.audiorecorder.helpers
 
 import android.content.Context
 import android.media.MediaRecorder
+import android.os.Build
 import java.io.File
 
 class AudioRecorder (
@@ -9,28 +10,34 @@ class AudioRecorder (
     private val file: File
 ) {
 
-    private var recorder: MediaRecorder = MediaRecorder()
+    private lateinit var recorder: MediaRecorder
 
     init {
-        recorder.setAudioSource(MediaRecorder.AudioSource.MIC)
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-        recorder.setOutputFile(file)
+        recorder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            MediaRecorder(context)
+        } else {
+            MediaRecorder()
+        }
 
-        recorder.prepare()
+//        recorder.setAudioSource(MediaRecorder.AudioSource.MIC)
+//        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+//        recorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+//        recorder.setOutputFile(file)
+
+//        recorder.prepare()
     }
 
     fun start(){
-        recorder.start()
+//        recorder.start()
     }
 
     fun pause() {
-        recorder.pause()
+//        recorder.pause()
     }
 
     fun stop(){
-        recorder.stop()
-        recorder.reset()
+//        recorder.stop()
+//        recorder.reset()
     }
 
 }

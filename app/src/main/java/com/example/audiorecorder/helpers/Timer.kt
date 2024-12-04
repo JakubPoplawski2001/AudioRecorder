@@ -3,11 +3,11 @@ package com.example.audiorecorder.helpers
 import android.os.Handler
 import android.os.Looper
 
-class Timer {
+class Timer (private val callbackDelayInMSec: Long = 300 ) {
 
     private val handler = Handler(Looper.getMainLooper())
     private var startTime: Long = 0
-    private var elapsedTime: Long = 0
+    private var recordedTime: Long = 0
     private var isRunning = false
 
     fun start(onTick: (Long) -> Unit) {
@@ -17,24 +17,29 @@ class Timer {
         isRunning = true
 
         handler.post(object : Runnable {
-            val callbackDelayInMSec: Long = 1000
+//            val callbackDelayInMSec: Long = 100
 
             override fun run() {
-                if (isRunning) {
-                    elapsedTime = System.currentTimeMillis() - startTime
-                    onTick(elapsedTime)
-                    handler.postDelayed(this, callbackDelayInMSec)
-                }
+                if (!isRunning) return
+
+                val elapsedTime = System.currentTimeMillis() - startTime + recordedTime
+                onTick(elapsedTime)
+                handler.postDelayed(this, callbackDelayInMSec)
             }
         })
     }
 
-    fun pause(){
+    fun pause() {
+        if (!isRunning) return
 
+        recordedTime += System.currentTimeMillis() - startTime
+        isRunning = false
+        handler.removeCallbacksAndMessages(null)
     }
 
     fun stop() {
         isRunning = false
         handler.removeCallbacksAndMessages(null)
+        recordedTime = 0
     }
 }

@@ -55,7 +55,7 @@ class LibraryActivity : AppCompatActivity() {
         addButton = findViewById(R.id.addButton)
 
         addButton.setOnClickListener {
-            val intent = Intent(this, AudioPlayerActivity::class.java)
+            val intent = Intent(this, RecorderActivity::class.java)
             startActivity(intent)
         }
 
