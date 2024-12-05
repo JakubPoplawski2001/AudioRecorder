@@ -33,6 +33,7 @@ class AudioPlayer (
 
     fun stop() {
         isPlaying = false
+        player.pause()
 //        player.stop() // after stop need to prepare player before starting player again
         seekTo(0)
     }
@@ -45,13 +46,16 @@ class AudioPlayer (
         return player.duration ?: 0
     }
 
-    protected fun finalize() {
-        // overrides basic java Object finalize method
-        release()
+    fun getCurrentPosition(): Int {
+        return player.currentPosition
     }
 
     fun release() {
         player.release()
     }
 
+    protected fun finalize() {
+        // overrides basic java Object finalize method
+        release()
+    }
 }
