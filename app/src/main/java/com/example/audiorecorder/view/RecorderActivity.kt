@@ -2,6 +2,7 @@ package com.example.audiorecorder.view
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -21,8 +22,8 @@ class RecorderActivity : AppCompatActivity() {
 
     private lateinit var toolBar: Toolbar
     private lateinit var timeLabel: TextView
-    private lateinit var startStopButton: Button
-    private lateinit var pauseButton: Button
+    private lateinit var startStopButton: ImageButton
+    private lateinit var pauseButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,10 +54,8 @@ class RecorderActivity : AppCompatActivity() {
         startStopButton.setOnClickListener {
             if (!recorder.hasRecordingStarted) {
                 startRecording()
-                // todo: Update UI btn
             } else {
                 stopRecording()
-                // todo: Update UI btn
             }
         }
 
@@ -65,10 +64,8 @@ class RecorderActivity : AppCompatActivity() {
 
             if (!recorder.isPaused) {
                 pauseRecording()
-                // todo: Update UI btn
             } else {
                 resumeRecording()
-                // todo: Update UI btn
             }
         }
 
@@ -77,11 +74,13 @@ class RecorderActivity : AppCompatActivity() {
     private fun startRecording() {
         startTimer()
         recorder.start()
+        startStopButton.setImageDrawable(getDrawable(R.drawable.baseline_stop_24))
     }
 
     private fun stopRecording() {
         timer.stop()
         recorder.stop()
+        startStopButton.setImageDrawable(getDrawable(R.drawable.baseline_fiber_manual_record_24))
 
         // todo: save recording prompt
         finish()
@@ -90,11 +89,14 @@ class RecorderActivity : AppCompatActivity() {
     private fun pauseRecording() {
         timer.pause()
         recorder.pause()
+        pauseButton.setImageDrawable(getDrawable(R.drawable.baseline_play_arrow_24))
+
     }
 
     private fun resumeRecording() {
         startTimer()
         recorder.resume()
+        pauseButton.setImageDrawable(getDrawable(R.drawable.baseline_pause_24))
     }
 
     private fun startTimer() {

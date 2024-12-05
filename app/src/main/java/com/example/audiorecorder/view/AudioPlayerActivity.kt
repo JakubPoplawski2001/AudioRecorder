@@ -2,6 +2,7 @@ package com.example.audiorecorder.view
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -29,8 +30,8 @@ class AudioPlayerActivity : AppCompatActivity() {
     private lateinit var currentTimeLabel: TextView
     private lateinit var endTimeLabel: TextView
     private lateinit var seekBar: SeekBar
-    private lateinit var stopButton: Button
-    private lateinit var playButton: Button
+    private lateinit var stopButton: ImageButton
+    private lateinit var playButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,10 +71,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         playButton.setOnClickListener {
             if (!player.isPlaying) {
                 startPlaying()
-                // todo: update UI btn
+
             } else {
                 pausePlaying()
-                // todo: update UI btn
             }
         }
 
@@ -122,15 +122,22 @@ class AudioPlayerActivity : AppCompatActivity() {
     private fun startPlaying() {
         player.start()
         StartSeekBarProgressUpdate()
+        playButton.setImageDrawable(getDrawable(R.drawable.baseline_pause_24))
     }
 
     private fun pausePlaying() {
         player.pause()
         seekBarProgressHandler.stop()
+        playButton.setImageDrawable(getDrawable(R.drawable.baseline_play_arrow_24))
     }
 
     private fun stopPlaying() {
         player.stop()
+        seekBar.progress = 0
+        currentTimeLabel. text = TimeUtils.toString(
+            0,
+            TimeUtils.FormatStyle.HOURS_MINUTES_SECONDS_MILLIS)
+        playButton.setImageDrawable(getDrawable(R.drawable.baseline_play_arrow_24))
         seekBarProgressHandler.stop()
     }
 
