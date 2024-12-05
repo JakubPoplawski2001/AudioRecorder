@@ -65,9 +65,10 @@ class LoginActivity : AppCompatActivity() {
 
             // TODO: remove dev fast login
             if (true) {
-                val fast_login = "qwas.wodor@gmail.com"
-                val fast_password = "123456789"
-                authorizeLogin(fast_login, fast_password)
+                // Starts new Library Activity
+                val intent = Intent(this, LibraryActivity::class.java)
+                startActivity(intent)
+
                 return@setOnClickListener
             }
             // TODO: remove dev fast login

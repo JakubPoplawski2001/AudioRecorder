@@ -5,11 +5,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.RecorderActivity">
+    tools:context=".view.AudioPlayerActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        app:title="Recorder"
+        app:title="Audio Player"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -22,38 +22,57 @@
         app:titleTextColor="@color/design_default_color_background" />
 
     <TextView
-        android:id="@+id/timeLabel"
+        android:id="@+id/currentTimeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00:00:00"
+        android:text="00:00:00.000"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <ImageButton
-        android:id="@+id/startStopButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+    <TextView
+        android:id="@+id/endTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="99:59:59.999"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar"
+        app:layout_constraintEnd_toEndOf="@+id/seekBar" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
-        android:contentDescription="Start / Stop"
-        app:layout_constraintEnd_toStartOf="@+id/pauseButton"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeLabel"
-        app:srcCompat="@drawable/baseline_fiber_manual_record_24" />
+        app:layout_constraintTop_toBottomOf="@+id/currentTimeLabel" />
 
     <ImageButton
-        android:id="@+id/pauseButton"
+        android:id="@+id/stopButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:contentDescription="Pause / Resume"
-        app:srcCompat="@drawable/baseline_pause_24"
+        android:contentDescription="Stop"
+        app:srcCompat="@drawable/baseline_stop_24"
         android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toStartOf="@+id/playButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"/>
+
+    <ImageButton
+        android:id="@+id/playButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:contentDescription="Play / Pause"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/startStopButton"
-        app:layout_constraintTop_toBottomOf="@+id/timeLabel" />
+        app:layout_constraintStart_toEndOf="@+id/stopButton"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar"
+        app:srcCompat="@drawable/baseline_play_arrow_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
