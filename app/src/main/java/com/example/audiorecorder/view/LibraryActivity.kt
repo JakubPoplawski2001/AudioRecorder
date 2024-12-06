@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.audiorecorder.R
 import com.example.audiorecorder.helpers.AudioPlayer
 import com.example.audiorecorder.helpers.ItemListAdapter
+import com.example.audiorecorder.model.Database
 import com.example.audiorecorder.model.Item
 import java.util.Date
 import java.util.UUID
@@ -24,6 +25,8 @@ import java.util.UUID
 
 class LibraryActivity : AppCompatActivity() {
     private lateinit var itemList: ArrayList<Item>
+    private lateinit var database: Database
+
 
     private lateinit var toolBar: Toolbar
     private lateinit var addButton: Button
@@ -40,8 +43,8 @@ class LibraryActivity : AppCompatActivity() {
         }
 
         // Setup ItemList
-        itemList = ArrayList()
-        populateDummyData()
+        database = Database(this.applicationContext)
+        loadItems()
 
         // Setup ToolBar
 //        supportActionBar?.setDisplayHomeAsUpEnabled(true);
@@ -76,11 +79,15 @@ class LibraryActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun loadItems() {
+        itemList = database.getItems()
+    }
+
     private fun populateDummyData() {
         for (i in 1..5) {
             val item = Item()
-            item.title = "Title $i"
-            item.description = "Description $i"
+            item.name = "Name $i"
+            item.audioFilePath = "audiofile$i.mp3"
             item.createDate = Date()
             item.timeLength = i * 230000
             itemList.add(item)

@@ -40,4 +40,8 @@ class Timer (private val callbackDelayInMSec: Long = 300 ) {
         handler.removeCallbacksAndMessages(null)
         recordedTime = 0
     }
+
+    fun getRecordedTime(): Int {
+        return recordedTime.toInt()
+    }
 }

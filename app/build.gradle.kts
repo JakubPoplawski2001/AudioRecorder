@@ -57,4 +57,7 @@ dependencies {
 
     // RecycleView
     implementation(libs.androidx.recyclerview)
+
+    // GSON
+    implementation(libs.gson)
 }

@@ -5,8 +5,8 @@ import java.util.UUID
 
 data class Item (
     val id: UUID = UUID.randomUUID(),
-    var title: String = "",
-    var description: String = "",
+    var name: String = "",
+    var audioFilePath: String = "",
     var createDate: Date = Date(),
     var timeLength: Int = 0
 )

@@ -13,10 +13,14 @@ import com.example.audiorecorder.R
 import com.example.audiorecorder.helpers.Recorder
 import com.example.audiorecorder.helpers.TimeUtils
 import com.example.audiorecorder.helpers.Timer
+import com.example.audiorecorder.model.Database
+import com.example.audiorecorder.model.Item
 import java.io.File
 
 class RecorderActivity : AppCompatActivity() {
 
+    private lateinit var database: Database
+    private lateinit var file: File
     private lateinit var recorder: Recorder
     private lateinit var timer: Timer
 
@@ -35,7 +39,10 @@ class RecorderActivity : AppCompatActivity() {
             insets
         }
 
-        recorder = Recorder(this, File(cacheDir, "test.mp3"))
+        database = Database(this.applicationContext)
+        file = File(cacheDir, "tmp.mp3")
+
+        recorder = Recorder(this, file)
         timer = Timer(1000)
 
         // Setup ToolBar
@@ -78,11 +85,18 @@ class RecorderActivity : AppCompatActivity() {
     }
 
     private fun stopRecording() {
+        val durartion = timer.getRecordedTime()
         timer.stop()
         recorder.stop()
         startStopButton.setImageDrawable(getDrawable(R.drawable.baseline_fiber_manual_record_24))
 
         // todo: save recording prompt
+        val item = Item()
+        item.name = "TMP"
+        item.timeLength = durartion
+        item.audioFilePath = file.path
+        database.addItem(item)
+
         finish()
     }
 
