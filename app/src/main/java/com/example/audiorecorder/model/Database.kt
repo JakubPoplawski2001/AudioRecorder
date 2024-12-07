@@ -1,13 +1,14 @@
 package com.example.audiorecorder.model
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.util.UUID
 
-class Database (private val context: Context) {
+class Database private constructor(private val context: Context) {
     private lateinit var items: ArrayList<Item>
 
     private val databasePath: File = context.filesDir
@@ -17,6 +18,18 @@ class Database (private val context: Context) {
 
     init {
         loadDatabase()
+    }
+
+    // Singleton
+    companion object {
+        @Volatile
+        private var instance: Database? = null
+
+        fun getInstance(context: Context): Database {
+            return instance ?: synchronized(this) {
+                instance ?: Database(context.applicationContext).also { instance = it }
+            }
+        }
     }
 
     fun getItems(): ArrayList<Item> {
@@ -58,7 +71,12 @@ class Database (private val context: Context) {
 
     fun deleteItem(id: UUID): Boolean {
         try {
-            items.remove(items.find { it.id == id })
+            val item = items.find { it.id == id }
+
+            // Delete associated audio file
+            item?.audioFilePath?.let { File(it).delete() }
+
+            items.remove(item)
         } catch (e: Exception) {
             ErrorNotify(e.toString())
             return false
@@ -101,7 +119,8 @@ class Database (private val context: Context) {
     }
 
     private fun ErrorNotify(message: String){
-        Toast.makeText(context, message, Toast.LENGTH_LONG)
+        Log.e("DatabaseError", message)
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
 }

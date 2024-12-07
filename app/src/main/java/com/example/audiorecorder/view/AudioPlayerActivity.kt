@@ -1,10 +1,12 @@
 package com.example.audiorecorder.view
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,6 +16,7 @@ import com.example.audiorecorder.R
 import com.example.audiorecorder.helpers.AudioPlayer
 import com.example.audiorecorder.helpers.SeekBarProgressHandler
 import com.example.audiorecorder.helpers.TimeUtils
+import com.example.audiorecorder.model.Database
 import com.example.audiorecorder.model.Item
 import java.io.File
 import java.util.UUID
@@ -21,6 +24,7 @@ import java.util.UUID
 class AudioPlayerActivity : AppCompatActivity() {
     var itemId: UUID? = null
     private var item: Item? = null
+    private lateinit var database: Database
     private lateinit var file: File
 
     private lateinit var player: AudioPlayer
@@ -43,10 +47,24 @@ class AudioPlayerActivity : AppCompatActivity() {
             insets
         }
 
-        // Get item from database
-//        item = getItemById(itemId)
 
-        file = File(cacheDir, "test.mp3")
+        itemId = intent.getStringExtra("itemIdString")?.let { UUID.fromString(it) }
+
+        if (itemId == null) {
+            finish()
+            return
+        }
+
+        try {
+            database = Database.getInstance(this)
+
+            item = database.getItem(itemId!!)
+            file = File(item?.audioFilePath)
+
+        } catch (e: Exception) {
+            Log.e("AudioPlayerActivity", e.toString())
+        }
+
 
         player = AudioPlayer(this, file)
 

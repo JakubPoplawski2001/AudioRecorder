@@ -39,7 +39,7 @@ class RecorderActivity : AppCompatActivity() {
             insets
         }
 
-        database = Database(this.applicationContext)
+        database = Database.getInstance(this)
         file = File(cacheDir, "tmp.mp3")
 
         recorder = Recorder(this, file)

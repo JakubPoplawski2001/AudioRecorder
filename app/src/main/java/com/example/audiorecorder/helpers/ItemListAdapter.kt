@@ -4,14 +4,16 @@ import android.view.LayoutInflater
 import com.example.audiorecorder.R
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audiorecorder.model.Item
 
 class ItemListAdapter (
     private val itemList: ArrayList<Item>,
-    private val onClick: (Item) -> Unit)
-    : RecyclerView.Adapter<ItemListAdapter.ItemViewHolder>() {
+    private val onClick: (Item) -> Unit,
+    private val onDeleteClicked: (Item) -> Unit
+): RecyclerView.Adapter<ItemListAdapter.ItemViewHolder>() {
 
 
     // ViewHolder class
@@ -21,12 +23,19 @@ class ItemListAdapter (
         private val filePathLabel: TextView = itemView.findViewById(R.id.item_audio_file_path)
         private val createDateLabel: TextView = itemView.findViewById(R.id.item_create_date)
         private val timeLengthLabel: TextView = itemView.findViewById(R.id.item_time_length)
+        private val deleteButton: ImageButton = itemView.findViewById(R.id.deleteButton)
         private var currentItem: Item? = null
 
         init {
             itemView.setOnClickListener {
                 currentItem?.let {
                     onClick(it)
+                }
+            }
+
+            deleteButton.setOnClickListener {
+                currentItem?.let {
+                    onDeleteClicked(it)
                 }
             }
         }
