@@ -57,6 +57,7 @@ dependencies {
 
     // RecycleView
     implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.swiperefreshlayout)
 
     // GSON
     implementation(libs.gson)

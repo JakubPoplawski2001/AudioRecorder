@@ -2,6 +2,7 @@ package com.example.audiorecorder.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -14,6 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.audiorecorder.R
 import com.example.audiorecorder.helpers.AudioPlayer
 import com.example.audiorecorder.helpers.ItemListAdapter
@@ -31,6 +33,7 @@ class LibraryActivity : AppCompatActivity() {
     private lateinit var toolBar: Toolbar
     private lateinit var addButton: Button
     private lateinit var recyclerView: RecyclerView
+    private lateinit var refreshLayout: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +46,9 @@ class LibraryActivity : AppCompatActivity() {
         }
 
         // Setup ItemList
-        database = Database(this.applicationContext)
-        loadItems()
+        database = Database.getInstance(this)
+        itemList = database.getItems()
+//        loadItems()
 
         // Setup ToolBar
 //        supportActionBar?.setDisplayHomeAsUpEnabled(true);
@@ -66,21 +70,37 @@ class LibraryActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val itemListAdapter = ItemListAdapter(itemList) {
-                item -> onItemClicked(item)
-        }
+        val itemListAdapter = ItemListAdapter(
+            itemList,
+            onClick = { item -> onItemClicked(item) },
+            onDeleteClicked = { item -> onItemDeleteClicked(item) })
         recyclerView.adapter = itemListAdapter
+
+        refreshLayout = findViewById(R.id.refreshLayout)
+        refreshLayout.setOnRefreshListener {
+            loadItems()
+        }
 
     }
 
-    private fun onItemClicked(item: Item){
+    private fun onItemClicked(item: Item) {
         val intent = Intent(this, AudioPlayerActivity::class.java)
-        intent.putExtra("itemId", item.id)
+        intent.putExtra("itemIdString", item.id.toString())
         startActivity(intent)
     }
 
+    private fun onItemDeleteClicked(item: Item) {
+        database.deleteItem(item.id)
+        loadItems()
+    }
+
     private fun loadItems() {
+        refreshLayout.isRefreshing = true
+
         itemList = database.getItems()
+        recyclerView?.adapter?.notifyDataSetChanged()
+
+        refreshLayout.isRefreshing = false
     }
 
     private fun populateDummyData() {
