@@ -48,10 +48,8 @@ class LibraryActivity : AppCompatActivity() {
         // Setup ItemList
         database = Database.getInstance(this)
         itemList = database.getItems()
-//        loadItems()
 
         // Setup ToolBar
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true);
         toolBar = findViewById(R.id.toolbar)
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -60,7 +58,6 @@ class LibraryActivity : AppCompatActivity() {
         }
 
         addButton = findViewById(R.id.addButton)
-
         addButton.setOnClickListener {
             val intent = Intent(this, RecorderActivity::class.java)
             startActivity(intent)
@@ -76,6 +73,7 @@ class LibraryActivity : AppCompatActivity() {
             onDeleteClicked = { item -> onItemDeleteClicked(item) })
         recyclerView.adapter = itemListAdapter
 
+        // Setup RefreshLayout
         refreshLayout = findViewById(R.id.refreshLayout)
         refreshLayout.setOnRefreshListener {
             loadItems()
@@ -103,14 +101,4 @@ class LibraryActivity : AppCompatActivity() {
         refreshLayout.isRefreshing = false
     }
 
-    private fun populateDummyData() {
-        for (i in 1..5) {
-            val item = Item()
-            item.name = "Name $i"
-            item.audioFilePath = "audiofile$i.mp3"
-            item.createDate = Date()
-            item.timeLength = i * 230000
-            itemList.add(item)
-        }
-    }
 }
