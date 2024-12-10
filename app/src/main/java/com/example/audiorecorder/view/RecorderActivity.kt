@@ -1,10 +1,12 @@
 package com.example.audiorecorder.view
 
 import android.os.Bundle
-import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
@@ -16,6 +18,7 @@ import com.example.audiorecorder.helpers.Timer
 import com.example.audiorecorder.model.Database
 import com.example.audiorecorder.model.Item
 import java.io.File
+import java.nio.file.Files
 
 class RecorderActivity : AppCompatActivity() {
 
@@ -78,6 +81,53 @@ class RecorderActivity : AppCompatActivity() {
 
     }
 
+
+
+    private fun saveDialog(duration: Int) {
+        val dialog = AlertDialog.Builder(this)
+        dialog.setTitle("Save audio file")
+
+        val nameField = EditText(this)
+        nameField.hint = "File name"
+        dialog.setView(nameField)
+
+        dialog.setPositiveButton("Save") { _, _ ->
+            val name = nameField.text.toString()
+            if (name.isNullOrBlank()) {
+                Toast.makeText(this, "Invalid name", Toast.LENGTH_SHORT)
+                return@setPositiveButton
+            }
+
+            saveAudioFile(name)
+
+            val item = Item()
+            item.name = name
+            item.timeLength = duration
+            item.audioFilePath = file.path
+
+            if (!database.addItem(item)) {
+                Toast.makeText(this,
+                    "Can not save file to database.",
+                    Toast.LENGTH_LONG)
+                return@setPositiveButton
+            }
+
+            finish()
+        }
+
+        dialog.setNegativeButton("Cancel and delete recording") { _, _ ->
+            finish()
+        }
+
+        dialog.show()
+    }
+
+    private fun saveAudioFile(newName: String, extension: String = "mp3") {
+        val newFile = File(applicationContext.filesDir, "$newName.$extension")
+        val newPath = Files.move(file.toPath(), newFile.toPath())
+        file = File(newPath.toUri())
+    }
+
     private fun startRecording() {
         startTimer()
         recorder.start()
@@ -85,19 +135,11 @@ class RecorderActivity : AppCompatActivity() {
     }
 
     private fun stopRecording() {
-        val durartion = timer.getRecordedTime()
-        timer.stop()
+        val duration = timer.stop()
         recorder.stop()
         startStopButton.setImageDrawable(getDrawable(R.drawable.baseline_fiber_manual_record_24))
 
-        // todo: save recording prompt
-        val item = Item()
-        item.name = "TMP"
-        item.timeLength = durartion
-        item.audioFilePath = file.path
-        database.addItem(item)
-
-        finish()
+        saveDialog(duration)
     }
 
     private fun pauseRecording() {

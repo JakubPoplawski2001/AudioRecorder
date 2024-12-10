@@ -35,10 +35,14 @@ class Timer (private val callbackDelayInMSec: Long = 300 ) {
         handler.removeCallbacksAndMessages(null)
     }
 
-    fun stop() {
+    fun stop(): Int {
+        if (isRunning) recordedTime += System.currentTimeMillis() - startTime
+
         isRunning = false
         handler.removeCallbacksAndMessages(null)
+        val duration = recordedTime.toInt()
         recordedTime = 0
+        return duration
     }
 
     fun getRecordedTime(): Int {
