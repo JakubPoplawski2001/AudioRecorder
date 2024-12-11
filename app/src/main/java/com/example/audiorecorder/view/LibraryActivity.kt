@@ -2,14 +2,9 @@ package com.example.audiorecorder.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,12 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.audiorecorder.R
-import com.example.audiorecorder.helpers.AudioPlayer
 import com.example.audiorecorder.helpers.ItemListAdapter
 import com.example.audiorecorder.model.Database
 import com.example.audiorecorder.model.Item
-import java.util.Date
-import java.util.UUID
 
 
 class LibraryActivity : AppCompatActivity() {
@@ -96,7 +88,7 @@ class LibraryActivity : AppCompatActivity() {
         refreshLayout.isRefreshing = true
 
         itemList = database.getItems()
-        val adapter = recyclerView?.adapter as ItemListAdapter
+        val adapter = recyclerView.adapter as ItemListAdapter
         adapter.updateItems(itemList)
 
         refreshLayout.isRefreshing = false

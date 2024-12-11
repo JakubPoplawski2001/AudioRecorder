@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 
 class RegisterActivity : AppCompatActivity() {
-    private lateinit var firebaseAuth: FirebaseAuth;
+    private lateinit var firebaseAuth: FirebaseAuth
 
     private lateinit var loginInput: EditText
     private lateinit var passwordInput: EditText

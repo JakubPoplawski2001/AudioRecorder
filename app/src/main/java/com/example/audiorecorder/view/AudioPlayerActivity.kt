@@ -2,11 +2,9 @@ package com.example.audiorecorder.view
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -22,7 +20,7 @@ import java.io.File
 import java.util.UUID
 
 class AudioPlayerActivity : AppCompatActivity() {
-    var itemId: UUID? = null
+    private var itemId: UUID? = null
     private var item: Item? = null
     private lateinit var database: Database
     private lateinit var file: File
@@ -120,7 +118,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 player.seekTo(seekBar?.progress ?: 0)
                 if (player.isPlaying) {
-                    StartSeekBarProgressUpdate()
+                    startSeekBarProgressUpdate()
                 }
             }
         })
@@ -140,7 +138,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private fun startPlaying() {
         player.start()
-        StartSeekBarProgressUpdate()
+        startSeekBarProgressUpdate()
         playButton.setImageDrawable(getDrawable(R.drawable.baseline_pause_24))
     }
 
@@ -160,7 +158,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         seekBarProgressHandler.stop()
     }
 
-    private fun StartSeekBarProgressUpdate() {
+    private fun startSeekBarProgressUpdate() {
         seekBarProgressHandler.start {
             val time = player.getCurrentPosition()
             seekBar.progress = time

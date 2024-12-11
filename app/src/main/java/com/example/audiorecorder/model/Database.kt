@@ -46,7 +46,7 @@ class Database private constructor(private val context: Context) {
         try {
             items.add(item)
         } catch (e: Exception) {
-            ErrorNotify(e.toString())
+            errorNotify(e.toString())
             return false
         }
 
@@ -61,7 +61,7 @@ class Database private constructor(private val context: Context) {
 
             items[index] = newItem
         } catch (e: Exception) {
-            ErrorNotify(e.toString())
+            errorNotify(e.toString())
             return false
         }
 
@@ -78,7 +78,7 @@ class Database private constructor(private val context: Context) {
 
             items.remove(item)
         } catch (e: Exception) {
-            ErrorNotify(e.toString())
+            errorNotify(e.toString())
             return false
         }
 
@@ -104,7 +104,7 @@ class Database private constructor(private val context: Context) {
             val dataType = object : TypeToken<ArrayList<Item>>() {}.type
             items = Gson().fromJson(jsonText, dataType)
         } catch (e: Exception) {
-            ErrorNotify(e.toString())
+            errorNotify(e.toString())
         }
         needToReload = false
     }
@@ -116,12 +116,12 @@ class Database private constructor(private val context: Context) {
             val file = File(databasePath, databaseName)
             file.writeText(jsonText)
         } catch (e: Exception) {
-            ErrorNotify(e.toString())
+            errorNotify(e.toString())
         }
         needToReload = true
     }
 
-    private fun ErrorNotify(message: String){
+    private fun errorNotify(message: String){
         Log.e("DatabaseError", message)
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
