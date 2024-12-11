@@ -1,9 +1,9 @@
 package com.example.audiorecorder.view
 
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -11,12 +11,18 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.audiorecorder.R
 import com.example.audiorecorder.helpers.Recorder
+import com.example.audiorecorder.helpers.SaveDialog
 import com.example.audiorecorder.helpers.TimeUtils
 import com.example.audiorecorder.helpers.Timer
+import com.example.audiorecorder.model.Database
+import com.example.audiorecorder.model.Item
 import java.io.File
+import java.nio.file.Files
 
 class RecorderActivity : AppCompatActivity() {
 
+    private lateinit var database: Database
+    private lateinit var file: File
     private lateinit var recorder: Recorder
     private lateinit var timer: Timer
 
@@ -35,7 +41,10 @@ class RecorderActivity : AppCompatActivity() {
             insets
         }
 
-        recorder = Recorder(this, File(cacheDir, "test.mp3"))
+        database = Database.getInstance(this)
+        file = File(cacheDir, "tmp.mp3")
+
+        recorder = Recorder(this, file)
         timer = Timer(1000)
 
         // Setup ToolBar
@@ -71,6 +80,42 @@ class RecorderActivity : AppCompatActivity() {
 
     }
 
+
+
+    private fun saveDialog(duration: Int) {
+        val dialog = SaveDialog(this,
+            onValidateInput = { name ->
+                if (name.isNullOrBlank()) return@SaveDialog SaveDialog.NULL_OR_BLANK
+                if (!saveAudioFile(name)) return@SaveDialog SaveDialog.FILE_ALREADY_EXIST
+                Toast.LENGTH_LONG
+
+                return@SaveDialog SaveDialog.SUCCESS
+            },
+            onSave = { name ->
+                val item = Item()
+                item.name = name
+                item.timeLength = duration
+                item.audioFilePath = file.path
+
+                database.addItem(item)
+                finish()
+            },
+            onCancel = {
+                finish()
+            })
+            .show()
+    }
+
+    private fun saveAudioFile(newName: String, extension: String = "mp3"): Boolean {
+        val newFile = File(applicationContext.filesDir, "$newName.$extension")
+        if (newFile.exists()) {
+            return false
+        }
+        val newPath = Files.move(file.toPath(), newFile.toPath())
+        file = File(newPath.toUri())
+        return true
+    }
+
     private fun startRecording() {
         startTimer()
         recorder.start()
@@ -78,12 +123,11 @@ class RecorderActivity : AppCompatActivity() {
     }
 
     private fun stopRecording() {
-        timer.stop()
+        val duration = timer.stop()
         recorder.stop()
         startStopButton.setImageDrawable(getDrawable(R.drawable.baseline_fiber_manual_record_24))
 
-        // todo: save recording prompt
-        finish()
+        saveDialog(duration)
     }
 
     private fun pauseRecording() {

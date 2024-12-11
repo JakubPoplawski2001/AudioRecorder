@@ -4,23 +4,26 @@ import android.view.LayoutInflater
 import com.example.audiorecorder.R
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.audiorecorder.model.Item
 
 class ItemListAdapter (
-    private val itemList: ArrayList<Item>,
-    private val onClick: (Item) -> Unit)
-    : RecyclerView.Adapter<ItemListAdapter.ItemViewHolder>() {
+    private var itemList: ArrayList<Item>,
+    private val onClick: (Item) -> Unit,
+    private val onDeleteClicked: (Item) -> Unit
+): RecyclerView.Adapter<ItemListAdapter.ItemViewHolder>() {
 
 
     // ViewHolder class
     inner class ItemViewHolder(itemView: View, val onClick: (Item) -> Unit)
         : RecyclerView.ViewHolder(itemView) {
-        private val title: TextView = itemView.findViewById(R.id.item_title)
-        private val description: TextView = itemView.findViewById(R.id.item_description)
-        private val createDate: TextView = itemView.findViewById(R.id.item_create_date)
-        private val timeLength: TextView = itemView.findViewById(R.id.item_time_length)
+        private val nameLabel: TextView = itemView.findViewById(R.id.item_name)
+        private val filePathLabel: TextView = itemView.findViewById(R.id.item_audio_file_path)
+        private val createDateLabel: TextView = itemView.findViewById(R.id.item_create_date)
+        private val timeLengthLabel: TextView = itemView.findViewById(R.id.item_time_length)
+        private val deleteButton: ImageButton = itemView.findViewById(R.id.deleteButton)
         private var currentItem: Item? = null
 
         init {
@@ -29,17 +32,28 @@ class ItemListAdapter (
                     onClick(it)
                 }
             }
+
+            deleteButton.setOnClickListener {
+                currentItem?.let {
+                    onDeleteClicked(it)
+                }
+            }
         }
 
         fun bind(item: Item) {
             currentItem = item
 
-            title.text = item.title
-            description.text = item.description
-            createDate.text = item.createDate.toString()
-            timeLength.text = TimeUtils.toString(
+            nameLabel.text = item.name
+            filePathLabel.text = item.audioFilePath
+            createDateLabel.text = item.createDate.toString()
+            timeLengthLabel.text = TimeUtils.toString(
                 item.timeLength, TimeUtils.FormatStyle.HOURS_MINUTES_SECONDS)
         }
+    }
+
+    fun updateItems(items: ArrayList<Item>) {
+        itemList = items
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {

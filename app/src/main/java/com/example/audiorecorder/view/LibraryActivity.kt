@@ -2,6 +2,7 @@ package com.example.audiorecorder.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -14,9 +15,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.audiorecorder.R
 import com.example.audiorecorder.helpers.AudioPlayer
 import com.example.audiorecorder.helpers.ItemListAdapter
+import com.example.audiorecorder.model.Database
 import com.example.audiorecorder.model.Item
 import java.util.Date
 import java.util.UUID
@@ -24,10 +27,13 @@ import java.util.UUID
 
 class LibraryActivity : AppCompatActivity() {
     private lateinit var itemList: ArrayList<Item>
+    private lateinit var database: Database
+
 
     private lateinit var toolBar: Toolbar
     private lateinit var addButton: Button
     private lateinit var recyclerView: RecyclerView
+    private lateinit var refreshLayout: SwipeRefreshLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +46,10 @@ class LibraryActivity : AppCompatActivity() {
         }
 
         // Setup ItemList
-        itemList = ArrayList()
-        populateDummyData()
+        database = Database.getInstance(this)
+        itemList = database.getItems()
 
         // Setup ToolBar
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true);
         toolBar = findViewById(R.id.toolbar)
         setSupportActionBar(toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -53,7 +58,6 @@ class LibraryActivity : AppCompatActivity() {
         }
 
         addButton = findViewById(R.id.addButton)
-
         addButton.setOnClickListener {
             val intent = Intent(this, RecorderActivity::class.java)
             startActivity(intent)
@@ -63,27 +67,39 @@ class LibraryActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val itemListAdapter = ItemListAdapter(itemList) {
-                item -> onItemClicked(item)
-        }
+        val itemListAdapter = ItemListAdapter(
+            itemList,
+            onClick = { item -> onItemClicked(item) },
+            onDeleteClicked = { item -> onItemDeleteClicked(item) })
         recyclerView.adapter = itemListAdapter
+
+        // Setup RefreshLayout
+        refreshLayout = findViewById(R.id.refreshLayout)
+        refreshLayout.setOnRefreshListener {
+            loadItems()
+        }
 
     }
 
-    private fun onItemClicked(item: Item){
+    private fun onItemClicked(item: Item) {
         val intent = Intent(this, AudioPlayerActivity::class.java)
-        intent.putExtra("itemId", item.id)
+        intent.putExtra("itemIdString", item.id.toString())
         startActivity(intent)
     }
 
-    private fun populateDummyData() {
-        for (i in 1..5) {
-            val item = Item()
-            item.title = "Title $i"
-            item.description = "Description $i"
-            item.createDate = Date()
-            item.timeLength = i * 230000
-            itemList.add(item)
-        }
+    private fun onItemDeleteClicked(item: Item) {
+        database.deleteItem(item.id)
+        loadItems()
     }
+
+    private fun loadItems() {
+        refreshLayout.isRefreshing = true
+
+        itemList = database.getItems()
+        val adapter = recyclerView?.adapter as ItemListAdapter
+        adapter.updateItems(itemList)
+
+        refreshLayout.isRefreshing = false
+    }
+
 }
