@@ -75,6 +75,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         toolBar.setNavigationOnClickListener {
             finish()
         }
+        toolBar.title = item?.name
 
         currentTimeLabel = findViewById(R.id.currentTimeLabel)
         endTimeLabel = findViewById(R.id.endTimeLabel)

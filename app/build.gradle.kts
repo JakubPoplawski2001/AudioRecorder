@@ -55,9 +55,10 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
 
-    // RecycleView
+    // RecycleView & UI
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.cardview)
 
     // GSON
     implementation(libs.gson)
