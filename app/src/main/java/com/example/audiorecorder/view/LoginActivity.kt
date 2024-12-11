@@ -63,16 +63,6 @@ class LoginActivity : AppCompatActivity() {
             val login = loginInput.text.toString()
             val password = passwordInput.text.toString()
 
-            // TODO: remove dev fast login
-            if (true) {
-                // Starts new Library Activity
-                val intent = Intent(this, LibraryActivity::class.java)
-                startActivity(intent)
-
-                return@setOnClickListener
-            }
-            // TODO: remove dev fast login
-
             if (!validateLoginInput(login)) return@setOnClickListener
             if (!validatePasswordInput(password)) return@setOnClickListener
 
