@@ -1,18 +1,17 @@
 package com.example.audiorecorder.view
 
 import android.os.Bundle
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.audiorecorder.R
 import com.example.audiorecorder.helpers.Recorder
+import com.example.audiorecorder.helpers.SaveDialog
 import com.example.audiorecorder.helpers.TimeUtils
 import com.example.audiorecorder.helpers.Timer
 import com.example.audiorecorder.model.Database
@@ -84,48 +83,37 @@ class RecorderActivity : AppCompatActivity() {
 
 
     private fun saveDialog(duration: Int) {
-        val dialog = AlertDialog.Builder(this)
-        dialog.setTitle("Save audio file")
+        val dialog = SaveDialog(this,
+            onValidateInput = { name ->
+                if (name.isNullOrBlank()) return@SaveDialog SaveDialog.NULL_OR_BLANK
+                if (!saveAudioFile(name)) return@SaveDialog SaveDialog.FILE_ALREADY_EXIST
+                Toast.LENGTH_LONG
 
-        val nameField = EditText(this)
-        nameField.hint = "File name"
-        dialog.setView(nameField)
+                return@SaveDialog SaveDialog.SUCCESS
+            },
+            onSave = { name ->
+                val item = Item()
+                item.name = name
+                item.timeLength = duration
+                item.audioFilePath = file.path
 
-        dialog.setPositiveButton("Save") { _, _ ->
-            val name = nameField.text.toString()
-            if (name.isNullOrBlank()) {
-                Toast.makeText(this, "Invalid name", Toast.LENGTH_SHORT)
-                return@setPositiveButton
-            }
-
-            saveAudioFile(name)
-
-            val item = Item()
-            item.name = name
-            item.timeLength = duration
-            item.audioFilePath = file.path
-
-            if (!database.addItem(item)) {
-                Toast.makeText(this,
-                    "Can not save file to database.",
-                    Toast.LENGTH_LONG)
-                return@setPositiveButton
-            }
-
-            finish()
-        }
-
-        dialog.setNegativeButton("Cancel and delete recording") { _, _ ->
-            finish()
-        }
-
-        dialog.show()
+                database.addItem(item)
+                finish()
+            },
+            onCancel = {
+                finish()
+            })
+            .show()
     }
 
-    private fun saveAudioFile(newName: String, extension: String = "mp3") {
+    private fun saveAudioFile(newName: String, extension: String = "mp3"): Boolean {
         val newFile = File(applicationContext.filesDir, "$newName.$extension")
+        if (newFile.exists()) {
+            return false
+        }
         val newPath = Files.move(file.toPath(), newFile.toPath())
         file = File(newPath.toUri())
+        return true
     }
 
     private fun startRecording() {
