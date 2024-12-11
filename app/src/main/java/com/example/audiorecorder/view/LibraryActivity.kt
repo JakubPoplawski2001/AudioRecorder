@@ -96,7 +96,8 @@ class LibraryActivity : AppCompatActivity() {
         refreshLayout.isRefreshing = true
 
         itemList = database.getItems()
-        recyclerView?.adapter?.notifyDataSetChanged()
+        val adapter = recyclerView?.adapter as ItemListAdapter
+        adapter.updateItems(itemList)
 
         refreshLayout.isRefreshing = false
     }

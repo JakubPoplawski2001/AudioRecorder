@@ -94,7 +94,10 @@ class Database private constructor(private val context: Context) {
         try {
             val file = File(databasePath, databaseName)
             // No database found
-            if (!file.exists()) items = ArrayList<Item>()
+            if (!file.exists()) {
+                items = ArrayList<Item>()
+                saveDatabase()
+            }
 
             // Retrieve items from database
             val jsonText = file.readText()

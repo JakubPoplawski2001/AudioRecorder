@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.audiorecorder.model.Item
 
 class ItemListAdapter (
-    private val itemList: ArrayList<Item>,
+    private var itemList: ArrayList<Item>,
     private val onClick: (Item) -> Unit,
     private val onDeleteClicked: (Item) -> Unit
 ): RecyclerView.Adapter<ItemListAdapter.ItemViewHolder>() {
@@ -49,6 +49,11 @@ class ItemListAdapter (
             timeLengthLabel.text = TimeUtils.toString(
                 item.timeLength, TimeUtils.FormatStyle.HOURS_MINUTES_SECONDS)
         }
+    }
+
+    fun updateItems(items: ArrayList<Item>) {
+        itemList = items
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
