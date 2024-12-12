@@ -23,14 +23,14 @@
 **AudioRecorder** is Android application for creating and replaying recordings.
 
 <p align="center">
-  <img width="33%" alt="Login page" src="Screenshots/LoginPage.jpg">
-  <img width="33%" alt="Register page" src="Screenshots/RegisterPage.jpg">
-  <img width="33%" alt="Library page" src="Screenshots/LibraryPage.jpg">
+  <img width="32%" alt="Login page" src="Screenshots/LoginPage.jpg">
+  <img width="32%" alt="Register page" src="Screenshots/RegisterPage.jpg">
+  <img width="32%" alt="Library page" src="Screenshots/LibraryPage.jpg">
 </p>
 <p align="center">
-  <img width="33%" alt="Recorder page" src="Screenshots/RecorderPage.jpg">
-  <img width="33%" alt="Save dialog" src="Screenshots/SaveDialog.jpg">
-  <img width="33%" alt="Audio player page" src="Screenshots/AudioPlayerPage.jpg">
+  <img width="32%" alt="Recorder page" src="Screenshots/RecorderPage.jpg">
+  <img width="32%" alt="Save dialog" src="Screenshots/SaveDialog.jpg">
+  <img width="32%" alt="Audio player page" src="Screenshots/AudioPlayerPage.jpg">
 </p>
 
 
